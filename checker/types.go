@@ -286,6 +286,10 @@ func indexType(ntype reflect.Type) (reflect.Type, bool) {
 		return nil, false
 	}
 
+	if m, ok := ntype.MethodByName("Subscript"); ok {
+		return m.Type.Out(0), true
+	}
+
 	switch ntype.Kind() {
 	case reflect.Interface:
 		return interfaceType, true

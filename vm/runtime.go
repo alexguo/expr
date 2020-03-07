@@ -50,6 +50,17 @@ func fetch(from interface{}, i interface{}) interface{} {
 		if value.IsValid() && value.CanInterface() {
 			return value.Interface()
 		}
+
+		m := v.MethodByName("Subscript")
+		if m.IsValid() {
+			out := m.Call([]reflect.Value{reflect.ValueOf(i)})
+			if len(out) > 0 {
+				value := out[0]
+				if value.IsValid() && value.CanInterface() {
+					return value.Interface()
+				}
+			}
+		}
 	}
 
 	panic(fmt.Sprintf("cannot fetch %v from %T", i, from))
